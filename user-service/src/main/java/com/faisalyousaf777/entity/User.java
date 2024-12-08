@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -16,7 +16,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     @Column(name = "user_id", updatable = false)
-    private long userId;
+    private Long userId;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -38,6 +38,7 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private LibraryCard libraryCard;
+
 
     public String toString(){
         return "User [userId=" + userId + ", " +
