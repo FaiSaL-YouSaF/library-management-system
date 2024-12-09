@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,11 +31,11 @@ public class LendingService {
 
     public BookDTO borrowBook(Long userId, Long bookId) {
         UserDTO user = userClient.getUserById(userId);
-        // Check if the user is eligible to borrow a book
         if (isEligibleToBorrow(user)) {
             user.getLibraryCard().setBooksDueDate(new HashMap<>() {{    // Placeholder
                 put(bookId, LocalDate.now().plusDays(LibraryConstants.DAYS_PER_BOOK));
             }});
+            user.getLibraryCard().setBooksIssued(user.getLibraryCard().getBooksIssued() + 1);
             return bookClient.getBookById(bookId);
         } else {
             return null;
@@ -43,9 +44,16 @@ public class LendingService {
 
     public String returnBook(Long userId, Long bookId) {
         UserDTO user = userClient.getUserById(userId);
-        // Calculate fine
-        user.getLibraryCard().getBooksDueDate().remove(bookId);
-        return "Book returned successfully";
+        user.getLibraryCard().setTotalFine(calculateFine(user));
+        if (user.getLibraryCard().getTotalFine().compareTo(BigDecimal.ZERO) > 0) {
+            return "Please pay the fine of " + user.getLibraryCard().getTotalFine();
+        }
+        if (user.getLibraryCard().getBooksDueDate().containsKey(bookId)) {
+            user.getLibraryCard().getBooksDueDate().remove(bookId);
+            return "Book returned successfully";
+        } else {
+            return "Book not issued to the user";
+        }
     }
 
 
@@ -61,9 +69,12 @@ public class LendingService {
 
     private BigDecimal calculateFine(UserDTO user) {
         BigDecimal fine = BigDecimal.ZERO;
+        LocalDate today = LocalDate.now();
         for (Map.Entry<Long, LocalDate> entry : user.getLibraryCard().getBooksDueDate().entrySet()) {
-            if (entry.getValue().isBefore(LocalDate.now())) {
-                fine = fine.add(LibraryConstants.FINE_PER_DAY);
+            LocalDate dueDate = entry.getValue();
+            if (dueDate.isBefore(today)) {
+                long daysLate = ChronoUnit.DAYS.between(dueDate, today);
+                fine = fine.add(LibraryConstants.FINE_PER_DAY.multiply(BigDecimal.valueOf(daysLate)));
             }
         }
         return fine;
