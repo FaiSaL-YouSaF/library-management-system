@@ -13,9 +13,10 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "user_table")
 public class User {
-    @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+
     @Column(name = "user_id", updatable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @Column(name = "first_name", nullable = false)
@@ -38,6 +39,15 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private LibraryCard libraryCard;
+
+    public User(String firstName, String lastName, String email, String phoneNumber, LocalDate dateOfBirth, String password){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.password = password;
+    }
 
 
     public String toString(){
