@@ -51,8 +51,8 @@ public class User {
     @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-//    private LibraryCard libraryCard;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private LibraryCard libraryCard;
 
     public User(String userName, String nationalIdentityCardNumber, String firstName, String lastName, String email, String phoneNumber, LocalDate dateOfBirth, String password) {
         this.userName = userName;

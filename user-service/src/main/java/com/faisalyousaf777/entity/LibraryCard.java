@@ -26,7 +26,7 @@ public class LibraryCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "card_id", updatable = false)
-    private Long cardId;
+    private long cardId;
 
     @Column(name = "card_number", nullable = false, unique = true)
     @Size(min = 8, max = 16)
