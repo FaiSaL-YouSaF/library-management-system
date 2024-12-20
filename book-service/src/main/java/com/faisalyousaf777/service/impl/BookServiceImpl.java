@@ -3,6 +3,7 @@ package com.faisalyousaf777.service.impl;
 import com.faisalyousaf777.entity.Book;
 import com.faisalyousaf777.exception.BookAlreadyExistsException;
 import com.faisalyousaf777.exception.BookNotFoundException;
+import com.faisalyousaf777.repository.BookRepository;
 import com.faisalyousaf777.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,79 +15,79 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     @Autowired
-    private final BookService bookService;
+    private final BookRepository bookRepository;
 
-    public BookServiceImpl(BookService bookService) {
-        this.bookService = bookService;
+    public BookServiceImpl(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
     @Override
     public void addBook(final Book book) {
-        if (bookService.getBookById(book.getBookId()).isPresent()) {
+        if (bookRepository.findById(book.getBookId()).isPresent()) {
             throw new BookAlreadyExistsException("Invalid ID : Book with the ID : " + book.getBookId() + " already exists.");
         }
-        bookService.addBook(book);
+        bookRepository.save(book);
     }
 
     @Override
     public Optional<Book> getBookById(final Long bookId) {
-        if (bookService.getBookById(bookId).isEmpty()) {
+        if (bookRepository.findById(bookId).isEmpty()) {
             throw new BookNotFoundException("Invalid ID : Book with the ID : " + bookId + " does not exists.");
         }
-        return bookService.getBookById(bookId);
+        return Optional.of(bookRepository.findById(bookId).get());
     }
 
     @Override
     public Optional<Book> getBookByTitle(String title) {
-        if (bookService.getBookByTitle(title).isEmpty()) {
+        if (bookRepository.findBookByTitle(title).isEmpty()) {
             throw new BookNotFoundException("Invalid Title : Book with the Title : " + title + " does not exists.");
         }
-        return bookService.getBookByTitle(title);
+        return bookRepository.findBookByTitle(title);
     }
 
     @Override
     public Optional<Book> getBookByIsbn(String isbn) {
-        if (bookService.getBookByIsbn(isbn).isEmpty()) {
+        if (bookRepository.findBookByIsbn(isbn).isEmpty()) {
             throw new BookNotFoundException("Invalid ISBN : Book with the ISBN : " + isbn + " does not exists.");
         }
-        return bookService.getBookByIsbn(isbn);
+        return bookRepository.findBookByIsbn(isbn);
     }
 
     @Override
     public Optional<List<Book>> getAllBooks() {
-        return bookService.getAllBooks();
+        return Optional.of(bookRepository.findAll());
     }
 
     @Override
     public Optional<List<Book>> getBooksByAuthor(String author) {
-        if (bookService.getBooksByAuthor(author).isEmpty()) {
+        if (bookRepository.findAllBooksByAuthor(author).isEmpty()) {
             throw new BookNotFoundException("Invalid Author : Book with the Author : " + author + " does not exists.");
         }
-        return bookService.getBooksByAuthor(author);
+        return bookRepository.findAllBooksByAuthor(author);
     }
 
     @Override
     public void updateBookById(Long bookId, Book book) {
-        if (bookService.getBookById(bookId).isEmpty()) {
+        if (bookRepository.findById(bookId).isEmpty()) {
             throw new BookNotFoundException("Invalid ID : Book with the ID : " + bookId + " does not exists.");
         } else {
-            Book currentBook = bookService.getBookById(bookId).get();
+            Book currentBook = bookRepository.findById(bookId).get();
             currentBook.setTitle(book.getTitle());
             currentBook.setAuthor(book.getAuthor());
             currentBook.setGenre(book.getGenre());
             currentBook.setIsbn(book.getIsbn());
             currentBook.setPublicationDate(book.getPublicationDate());
             currentBook.setStatus(book.getStatus());
-            bookService.addBook(currentBook);
+            bookRepository.save(currentBook);
         }
     }
 
     @Override
     public void deleteBookById(Long bookId) {
-        if (bookService.getBookById(bookId).isEmpty()) {
+        if (bookRepository.findById(bookId).isEmpty()) {
             throw new BookNotFoundException("Invalid ID : Book with the ID : " + bookId + " does not exists.");
         } else {
-            bookService.deleteBookById(bookId);
+            bookRepository.deleteById(bookId);
         }
     }
 }
