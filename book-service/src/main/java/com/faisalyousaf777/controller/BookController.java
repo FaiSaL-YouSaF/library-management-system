@@ -39,7 +39,7 @@ public class BookController {
         return ResponseEntity.ok(bookService.getBookByIsbn(isbn));
     }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public ResponseEntity<Object> getAllBooks() {
         return ResponseEntity.ok(bookService.getAllBooks());
     }

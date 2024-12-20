@@ -1,5 +1,6 @@
 package com.faisalyousaf777.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -52,6 +53,7 @@ public class User {
     private String password;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private LibraryCard libraryCard;
 
     public User(String userName, String nationalIdentityCardNumber, String firstName, String lastName, String email, String phoneNumber, LocalDate dateOfBirth, String password) {

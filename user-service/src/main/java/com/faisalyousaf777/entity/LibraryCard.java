@@ -2,6 +2,7 @@ package com.faisalyousaf777.entity;
 
 
 import com.faisalyousaf777.enums.CardStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
@@ -29,7 +30,7 @@ public class LibraryCard {
     private long cardId;
 
     @Column(name = "card_number", nullable = false, unique = true)
-    @Size(min = 8, max = 16)
+    @Size(min = 7, max = 9, message = "Card number must be between 7 and 9 characters long")
     private String cardNumber;
 
     @Column(name = "issue_date", nullable = false)
@@ -59,6 +60,7 @@ public class LibraryCard {
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     public LibraryCard(String cardNumber,

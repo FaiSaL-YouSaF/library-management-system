@@ -23,7 +23,6 @@ public class LibraryCardFactory {
     }
 
     private static String generateCardNumber() {
-        return "LC-" + UUID.randomUUID().toString().substring(0, 5) +
-                "-" + UUID.randomUUID().toString().substring(0, 5);
+        return "LC-" + UUID.randomUUID().toString().substring(0, 5).toUpperCase();
     }
 }

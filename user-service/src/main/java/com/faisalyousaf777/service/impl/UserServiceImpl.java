@@ -45,10 +45,10 @@ public class UserServiceImpl implements UserService {
         log.info("Generating a new library card for the user with the email : {}", user.getEmail());
         LibraryCard libraryCard = LibraryCardFactory.createLibraryCard();
         libraryCard.setUser(user);
-        libraryCardRepository.save(libraryCard);
-        log.info("Registering a new user with the email : {}", user.getEmail());
         user.setLibraryCard(libraryCard);
+        log.info("Registering a new user with the email : {}", user.getEmail());
         userRepository.save(user);
+        libraryCardRepository.save(libraryCard);
     }
 
     @Override
