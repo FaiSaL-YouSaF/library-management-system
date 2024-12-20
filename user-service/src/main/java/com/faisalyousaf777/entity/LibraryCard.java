@@ -29,7 +29,7 @@ public class LibraryCard {
     private Long cardId;
 
     @Column(name = "card_number", nullable = false, unique = true)
-    @Size(min = 6, max = 16)
+    @Size(min = 8, max = 16)
     private String cardNumber;
 
     @Column(name = "issue_date", nullable = false)
@@ -58,7 +58,7 @@ public class LibraryCard {
     private Map<Long, LocalDate> booksDueDate = new HashMap<>();
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
 
     public LibraryCard(String cardNumber,

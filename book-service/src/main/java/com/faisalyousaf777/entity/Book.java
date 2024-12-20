@@ -1,18 +1,15 @@
 package com.faisalyousaf777.entity;
 
 import com.faisalyousaf777.enums.BookStatus;
-import com.faisalyousaf777.models.LibraryCard;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Data
 @Setter
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "book_table")
@@ -41,13 +38,5 @@ public class Book {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private BookStatus status;
-
-    @ManyToMany
-    @JoinTable(
-            name = "book_library_card",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "card_id")
-    )
-    private LibraryCard libraryCard;
 
 }
