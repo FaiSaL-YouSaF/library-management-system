@@ -1,6 +1,7 @@
 package com.faisalyousaf777.service.impl;
 
 import com.faisalyousaf777.entity.Book;
+import com.faisalyousaf777.enums.BookStatus;
 import com.faisalyousaf777.exception.BookAlreadyExistsException;
 import com.faisalyousaf777.exception.BookNotFoundException;
 import com.faisalyousaf777.repository.BookRepository;
@@ -78,6 +79,17 @@ public class BookServiceImpl implements BookService {
             currentBook.setIsbn(book.getIsbn());
             currentBook.setPublicationDate(book.getPublicationDate());
             currentBook.setStatus(book.getStatus());
+            bookRepository.save(currentBook);
+        }
+    }
+
+    @Override
+    public void updateBookStatusById(Long bookId, BookStatus status) {
+        if (bookRepository.findById(bookId).isEmpty()) {
+            throw new BookNotFoundException("Invalid ID : Book with the ID : " + bookId + " does not exists.");
+        } else {
+            Book currentBook = bookRepository.findById(bookId).get();
+            currentBook.setStatus(status);
             bookRepository.save(currentBook);
         }
     }

@@ -11,6 +11,8 @@ import java.time.LocalDate;
 @Getter
 public class UserDTO {
     private Long userId;
+    private String username;
+    private String nationalIdentityCardNumber;
     private String firstName;
     private String lastName;
     private String email;

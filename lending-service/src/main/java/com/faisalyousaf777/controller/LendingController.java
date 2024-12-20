@@ -4,10 +4,11 @@ package com.faisalyousaf777.controller;
 import com.faisalyousaf777.dto.BookDTO;
 import com.faisalyousaf777.service.LendingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/v1/lendings")
 public class LendingController {
 
     @Autowired
@@ -17,13 +18,13 @@ public class LendingController {
         this.lendingService = lendingService;
     }
 
-    @PostMapping("/borrow/{userId}/{bookId}")
-    public BookDTO borrowBook(Long userId, Long bookId) {
-        return lendingService.borrowBook(userId, bookId);
+    @GetMapping("/issue-book/{userId}/{bookId}")
+    public ResponseEntity<BookDTO> issueBook(@PathVariable("userId") final Long userId, @PathVariable("bookId") final Long bookId) {
+        return ResponseEntity.ok(lendingService.issueBook(userId, bookId));
     }
 
-    @PostMapping("/return/{userId}/{bookId}")
-    public String returnBook(Long userId, Long bookId) {
+    @PutMapping("/return-book/{cardId}/{bookId}")
+    public String returnBook(@PathVariable("userId") final Long userId, @PathVariable("bookId") final Long bookId) {
         return lendingService.returnBook(userId, bookId);
     }
 }

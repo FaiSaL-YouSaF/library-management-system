@@ -49,13 +49,19 @@ public class BookController {
         return ResponseEntity.ok(bookService.getBooksByAuthor(author));
     }
 
-    @PutMapping("/{bookId}")
+    @PutMapping("/update/{bookId}")
     public ResponseEntity<Object> updateBookById(@PathVariable("bookId") final Long bookId, @RequestBody final Book book) {
         bookService.updateBookById(bookId, book);
         return ResponseEntity.ok("Book updated successfully.");
     }
 
-    @DeleteMapping("/{bookId}")
+    @PutMapping("/update/status/{bookId}/")
+    public ResponseEntity<Object> updateBookStatusById(@PathVariable("bookId") final Long bookId, @RequestAttribute() final Book book) {
+        bookService.updateBookStatusById(bookId, book.getStatus());
+        return ResponseEntity.ok("Book status updated successfully.");
+    }
+
+    @DeleteMapping("/delete/{bookId}")
     public ResponseEntity<Object> deleteBookById(@PathVariable("bookId") final Long bookId) {
         bookService.deleteBookById(bookId);
         return ResponseEntity.ok("Book deleted successfully.");

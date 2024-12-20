@@ -30,7 +30,7 @@ public class LibraryCard {
     private long cardId;
 
     @Column(name = "card_number", nullable = false, unique = true)
-    @Size(min = 7, max = 9, message = "Card number must be between 7 and 9 characters long")
+    @Size(min = 7, max = 16, message = "Card number must be between 7 and 9 characters long")
     private String cardNumber;
 
     @Column(name = "issue_date", nullable = false)
