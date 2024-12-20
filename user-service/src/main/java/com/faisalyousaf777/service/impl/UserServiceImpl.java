@@ -8,12 +8,14 @@ import com.faisalyousaf777.factory.LibraryCardFactory;
 import com.faisalyousaf777.repository.LibraryCardRepository;
 import com.faisalyousaf777.repository.UserRepository;
 import com.faisalyousaf777.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -40,10 +42,12 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByPhoneNumber(user.getPhoneNumber()).isPresent()) {
             throw new UserAlreadyExistsException("Invalid Phone Number : User with the Phone Number : " + user.getPhoneNumber() + " already exists.");
         }
-//        LibraryCard libraryCard = LibraryCardFactory.createLibraryCard();
-//        libraryCard.setUser(user);
-//        libraryCardRepository.save(libraryCard);
-//        user.setLibraryCard(libraryCard);
+        log.info("Generating a new library card for the user with the email : {}", user.getEmail());
+        LibraryCard libraryCard = LibraryCardFactory.createLibraryCard();
+        libraryCard.setUser(user);
+        libraryCardRepository.save(libraryCard);
+        log.info("Registering a new user with the email : {}", user.getEmail());
+        user.setLibraryCard(libraryCard);
         userRepository.save(user);
     }
 
@@ -66,6 +70,9 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("Invalid ID : User with the ID : " + id + " does not exists.");
         } else {
             User currentUser = userRepository.findById(id).get();
+            currentUser.setUserName(user.getUserName());
+            log.info("Updating the user with the user-name : {}", currentUser.getUserName());
+            currentUser.setNationalIdentityCardNumber(user.getNationalIdentityCardNumber());
             currentUser.setFirstName(user.getFirstName());
             currentUser.setLastName(user.getLastName());
             currentUser.setEmail(user.getEmail());
@@ -81,6 +88,7 @@ public class UserServiceImpl implements UserService {
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException("Invalid ID : User with the ID : " + id + " does not exists.");
         } else {
+            log.info("Deleting the user with the ID : {}", id);
             userRepository.deleteById(id);
         }
     }
