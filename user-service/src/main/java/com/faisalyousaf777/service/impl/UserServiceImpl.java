@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private final LibraryCardRepository libraryCardRepository;
 
+
     public UserServiceImpl(UserRepository userRepository, LibraryCardRepository libraryCardRepository) {
         this.userRepository = userRepository;
         this.libraryCardRepository = libraryCardRepository;
@@ -39,10 +40,10 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByPhoneNumber(user.getPhoneNumber()).isPresent()) {
             throw new UserAlreadyExistsException("Invalid Phone Number : User with the Phone Number : " + user.getPhoneNumber() + " already exists.");
         }
-        LibraryCard libraryCard = LibraryCardFactory.createLibraryCard();
-        libraryCard.setUser(user);
-        libraryCardRepository.save(libraryCard);
-        user.setLibraryCard(libraryCard);
+//        LibraryCard libraryCard = LibraryCardFactory.createLibraryCard();
+//        libraryCard.setUser(user);
+//        libraryCardRepository.save(libraryCard);
+//        user.setLibraryCard(libraryCard);
         userRepository.save(user);
     }
 
